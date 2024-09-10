@@ -14,7 +14,8 @@ const PatientList = () => {
     const fetchPatients = async () => {
       try {
         const response = await axiosInstance.get("/patient_list");
-        setPatients(response.data);
+        console.log(response.data.body);
+        setPatients(response.data.body);
         setIsLoading(false);
       } catch (err: any) {
         setError(err.message);
