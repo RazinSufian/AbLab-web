@@ -1,6 +1,7 @@
 "use client";
 import axiosInstance from "@/utils/axiosInstance";
 import React, { useEffect, useState } from "react";
+import PatientLists from "./data-table";
 interface Patient {
   name: string;
   condition: string;
@@ -32,11 +33,12 @@ const PatientList = () => {
   return (
     <div>
       <h1>Patient List</h1>
-      <ul>
+      {/* <ul>
         {patients.map((patient, index) => (
           <li key={index}>{patient.name}</li>
         ))}
-      </ul>
+      </ul> */}
+      <PatientLists data={patients}></PatientLists>
     </div>
   );
 };

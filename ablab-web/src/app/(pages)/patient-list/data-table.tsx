@@ -32,10 +32,10 @@ import {
 } from "@/components/ui/table";
 import { DatePickerWithRange } from "@/components/customUi/DatePickerWithRange";
 
-import { data } from "./column";
+// import { data } from "./column";
 import { columns } from "./column";
 
-const PatientList = () => {
+const PatientLists = ({ data }: { data: any }) => {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -113,9 +113,9 @@ const PatientList = () => {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
                   );
                 })}
@@ -180,4 +180,4 @@ const PatientList = () => {
   );
 };
 
-export default PatientList;
+export default PatientLists;
