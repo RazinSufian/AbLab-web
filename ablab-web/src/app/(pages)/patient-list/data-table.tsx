@@ -23,6 +23,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import {
   Table,
   TableBody,
   TableCell,
@@ -69,12 +78,27 @@ const PatientLists = ({ data }: { data: any }) => {
         <DatePickerWithRange></DatePickerWithRange>
         <Input
           placeholder="Filter by Name..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("patient_name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            table.getColumn("patient_name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
+
+    <Select>
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="Filter by Week" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectLabel>Week</SelectLabel>
+          <SelectItem value="1">This Week</SelectItem>
+          <SelectItem value="2">Last 2 Week</SelectItem>
+          <SelectItem value="4">Last 3 Week</SelectItem>
+
+        </SelectGroup>
+      </SelectContent>
+    </Select>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">

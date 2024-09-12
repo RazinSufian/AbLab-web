@@ -15,219 +15,36 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 
+export type Payment = {
+  patient_name: string;
+  patient_id: string;
+  report_id: string;
+  entry_date: string; // Assuming entry_date as a string in "YYYY-MM-DD" format
+  estimated_total: number;
+  discount: number;
+  paid_amount: number;
+  test_report_status: Record<string, string>; // Updated type for dynamic test report statuses
+  paymentDue: string; // Assuming paymentDue as a string in "YYYY-MM-DD" format
+};
+
 export const data: Payment[] = [
+  // Sample data with the new test_report_status field
   {
-    name: "Md. Rafiqul Islam",
-    patientId: "PBD001",
-    reportId: "RBD1001",
-    date: "2024-08-27",
-    total: 5000, // in BDT
+    patient_name: "Md. Rafiqul Islam",
+    patient_id: "PBD001",
+    report_id: "RBD1001",
+    entry_date: "2024-08-27",
+    estimated_total: 5000, // in BDT
     discount: 500, // in BDT
-    reportStatus: "completed",
+    paid_amount: 500, // in BDT
+    test_report_status: {
+      "NB000006": "1",
+      "HB000009": "2"
+    },
     paymentDue: "2024-09-01",
   },
-  {
-    name: "Shakila Akhter",
-    patientId: "PBD002",
-    reportId: "RBD1002",
-    date: "2024-08-26",
-    total: 7500, // in BDT
-    discount: 1000, // in BDT
-    reportStatus: "pending",
-    paymentDue: "2024-09-02",
-  },
-  {
-    name: "Abdur Rahman",
-    patientId: "PBD003",
-    reportId: "RBD1003",
-    date: "2024-08-25",
-    total: 6200, // in BDT
-    discount: 800, // in BDT
-    reportStatus: "processing",
-    paymentDue: "2024-09-03",
-  },
-  {
-    name: "Fatema Begum",
-    patientId: "PBD004",
-    reportId: "RBD1004",
-    date: "2024-08-24",
-    total: 4500, // in BDT
-    discount: 450, // in BDT
-    reportStatus: "failed",
-    paymentDue: "2024-09-04",
-  },
-  {
-    name: "Hasan Mahmud",
-    patientId: "PBD005",
-    reportId: "RBD1005",
-    date: "2024-08-23",
-    total: 8800, // in BDT
-    discount: 1200, // in BDT
-    reportStatus: "completed",
-    paymentDue: "2024-09-05",
-  },
-  {
-    name: "Ayesha Siddiqua",
-    patientId: "PBD006",
-    reportId: "RBD1006",
-    date: "2024-08-22",
-    total: 5200, // in BDT
-    discount: 700, // in BDT
-    reportStatus: "completed",
-    paymentDue: "2024-09-06",
-  },
-  {
-    name: "Jamal Uddin",
-    patientId: "PBD007",
-    reportId: "RBD1007",
-    date: "2024-08-21",
-    total: 3900, // in BDT
-    discount: 300, // in BDT
-    reportStatus: "processing",
-    paymentDue: "2024-09-07",
-  },
-  {
-    name: "Nasima Khatun",
-    patientId: "PBD008",
-    reportId: "RBD1008",
-    date: "2024-08-20",
-    total: 6200, // in BDT
-    discount: 800, // in BDT
-    reportStatus: "pending",
-    paymentDue: "2024-09-08",
-  },
-  {
-    name: "Mizanur Rahman",
-    patientId: "PBD009",
-    reportId: "RBD1009",
-    date: "2024-08-19",
-    total: 7300, // in BDT
-    discount: 950, // in BDT
-    reportStatus: "completed",
-    paymentDue: "2024-09-09",
-  },
-  {
-    name: "Parveen Sultana",
-    patientId: "PBD010",
-    reportId: "RBD1010",
-    date: "2024-08-18",
-    total: 6700, // in BDT
-    discount: 600, // in BDT
-    reportStatus: "failed",
-    paymentDue: "2024-09-10",
-  },
-  {
-    name: "Rahim Khan",
-    patientId: "PBD011",
-    reportId: "RBD1011",
-    date: "2024-08-17",
-    total: 8400, // in BDT
-    discount: 1100, // in BDT
-    reportStatus: "completed",
-    paymentDue: "2024-09-11",
-  },
-  {
-    name: "Rubina Akhter",
-    patientId: "PBD012",
-    reportId: "RBD1012",
-    date: "2024-08-16",
-    total: 9300, // in BDT
-    discount: 1200, // in BDT
-    reportStatus: "processing",
-    paymentDue: "2024-09-12",
-  },
-  {
-    name: "Rafiq Ahmed",
-    patientId: "PBD013",
-    reportId: "RBD1013",
-    date: "2024-08-15",
-    total: 5100, // in BDT
-    discount: 700, // in BDT
-    reportStatus: "pending",
-    paymentDue: "2024-09-13",
-  },
-  {
-    name: "Sultana Begum",
-    patientId: "PBD014",
-    reportId: "RBD1014",
-    date: "2024-08-14",
-    total: 4700, // in BDT
-    discount: 500, // in BDT
-    reportStatus: "completed",
-    paymentDue: "2024-09-14",
-  },
-  {
-    name: "Kamal Hossain",
-    patientId: "PBD015",
-    reportId: "RBD1015",
-    date: "2024-08-13",
-    total: 8200, // in BDT
-    discount: 1000, // in BDT
-    reportStatus: "failed",
-    paymentDue: "2024-09-15",
-  },
-  {
-    name: "Taslima Akhter",
-    patientId: "PBD016",
-    reportId: "RBD1016",
-    date: "2024-08-12",
-    total: 6000, // in BDT
-    discount: 800, // in BDT
-    reportStatus: "completed",
-    paymentDue: "2024-09-16",
-  },
-  {
-    name: "Nayeem Hossain",
-    patientId: "PBD017",
-    reportId: "RBD1017",
-    date: "2024-08-11",
-    total: 9100, // in BDT
-    discount: 1300, // in BDT
-    reportStatus: "pending",
-    paymentDue: "2024-09-17",
-  },
-  {
-    name: "Hasina Khatun",
-    patientId: "PBD018",
-    reportId: "RBD1018",
-    date: "2024-08-10",
-    total: 7300, // in BDT
-    discount: 900, // in BDT
-    reportStatus: "processing",
-    paymentDue: "2024-09-18",
-  },
-  {
-    name: "Md. Yusuf",
-    patientId: "PBD019",
-    reportId: "RBD1019",
-    date: "2024-08-09",
-    total: 5400, // in BDT
-    discount: 600, // in BDT
-    reportStatus: "completed",
-    paymentDue: "2024-09-19",
-  },
-  {
-    name: "Salma Rahman",
-    patientId: "PBD020",
-    reportId: "RBD1020",
-    date: "2024-08-08",
-    total: 6800, // in BDT
-    discount: 800, // in BDT
-    reportStatus: "failed",
-    paymentDue: "2024-09-20",
-  },
+  // Add more entries similarly with updated test_report_status
 ];
-
-export type Payment = {
-  name: string;
-  patientId: string;
-  reportId: string;
-  date: string; // Assuming date as a string in "YYYY-MM-DD" format
-  total: number;
-  discount: number;
-  reportStatus: string; // Define specific status types if needed
-  paymentDue: string; // Assuming date as a string in "YYYY-MM-DD" format
-};
 
 export const columns: ColumnDef<Payment>[] = [
   {
@@ -253,61 +70,84 @@ export const columns: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "name",
-    header: "Name",
-    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+    accessorKey: "patient_name",
+    header: "Patient Name",
+    cell: ({ row }) => <div>{row.getValue("patient_name")}</div>,
   },
   {
-    accessorKey: "patientId",
+    accessorKey: "patient_id",
     header: "Patient ID",
-    cell: ({ row }) => <div>{row.getValue("patientId")}</div>,
+    cell: ({ row }) => <div>{row.getValue("patient_id")}</div>,
   },
   {
-    accessorKey: "reportId",
+    accessorKey: "report_id",
     header: "Report ID",
-    cell: ({ row }) => <div>{row.getValue("reportId")}</div>,
+    cell: ({ row }) => <div>{row.getValue("report_id")}</div>,
   },
   {
-    accessorKey: "date",
-    header: "Date",
-    cell: ({ row }) => <div>{row.getValue("date")}</div>,
+    accessorKey: "entry_date",
+    header: "Entry Date",
+    cell: ({ row }) => <div>{row.getValue("entry_date")}</div>,
   },
   {
-    accessorKey: "total",
-    header: "Total (BDT)",
+    accessorKey: "estimated_total",
+    header: "Estimated Total (BDT)",
     cell: ({ row }) => {
-      const total = parseFloat(row.getValue("total"));
+      const estimated_total = parseFloat(row.getValue("estimated_total"));
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "BDT",
-      }).format(total);
-      return <div className="text-right font-medium">{formatted}</div>;
+      }).format(estimated_total);
+      return <div className="text-left font-medium">{formatted}</div>;
     },
   },
   {
     accessorKey: "discount",
-    header: "Discount (BDT)",
+    header: "Discount (%)",
     cell: ({ row }) => {
       const discount = parseFloat(row.getValue("discount"));
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "BDT",
-      }).format(discount);
-      return <div className="text-right font-medium">{formatted}</div>;
+      
+      return <div className="text-left font-medium">{discount}%</div>;
     },
   },
   {
-    accessorKey: "reportStatus",
-    header: "Report Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("reportStatus")}</div>
-    ),
+    accessorKey: "paid_amount",
+    header: "Paid Amount (BDT)",
+    cell: ({ row }) => {
+      const paid_amount = parseFloat(row.getValue("paid_amount"));
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "BDT",
+      }).format(paid_amount);
+      return <div className="text-left font-medium">{formatted}</div>;
+    },
   },
   {
-    accessorKey: "paymentDue",
-    header: "Payment Due",
-    cell: ({ row }) => <div>{row.getValue("paymentDue")}</div>,
+    accessorKey: "test_report_status",
+    header: "Test Status",
+    cell: ({ row }) => {
+      const statusCounts = Object.values(row.getValue("test_report_status") as Record<string, string>);
+      const totalCount = statusCounts.reduce((acc, value) => acc + parseInt(value, 10), 0);
+      return <div>{totalCount} tests</div>;
+    },
   },
+  
+  {
+    accessorKey: "estimated_total", // This is used as a key just for identification
+    header: "Remaining Payment (BDT)",
+    cell: ({ row }) => {
+      const estimatedTotal = row.original.estimated_total; // Accessing from the original data
+      const paidAmount = row.original.paid_amount; // Accessing from the original data
+      const remainingPayment = estimatedTotal - paidAmount;
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "BDT"
+      }).format(remainingPayment);
+      return <div className="text-left font-medium">{formatted}</div>;
+    },
+  }
+  ,
+
   {
     id: "actions",
     enableHiding: false,
@@ -325,7 +165,7 @@ export const columns: ColumnDef<Payment>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.reportId)}
+              onClick={() => navigator.clipboard.writeText(payment.report_id)}
             >
               Copy report ID
             </DropdownMenuItem>
