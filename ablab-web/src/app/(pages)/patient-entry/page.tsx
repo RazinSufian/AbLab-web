@@ -1,6 +1,7 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+"use client";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Button } from "@/components/ui/button";
 
 interface Test {
   test_name_id: string;
@@ -26,15 +27,17 @@ interface ReportResponse {
 
 const TestReport: React.FC = () => {
   const [tests, setTests] = useState<Test[]>([]);
-  const [selectedTests, setSelectedTests] = useState<{ [key: string]: string }>({});
+  const [selectedTests, setSelectedTests] = useState<{ [key: string]: string }>(
+    {}
+  );
   const [patientId, setPatientId] = useState<string | null>(null);
   const [patientInfo, setPatientInfo] = useState({
-    name: '',
-    age: '',
-    phone: '',
-    address: '',
-    blood_group: '',
-    date_of_birth: ''
+    name: "",
+    age: "",
+    phone: "",
+    address: "",
+    blood_group: "",
+    date_of_birth: "",
   });
   const [discount, setDiscount] = useState<number>(0);
   const [paidAmount, setPaidAmount] = useState<number>(0);
@@ -42,10 +45,12 @@ const TestReport: React.FC = () => {
   useEffect(() => {
     const fetchTests = async () => {
       try {
-        const response = await axios.get('https://3p3xvw09xg.execute-api.ap-south-1.amazonaws.com/dev/test_list');
+        const response = await axios.get(
+          "https://3p3xvw09xg.execute-api.ap-south-1.amazonaws.com/dev/test_list"
+        );
         setTests(response.data.body.tests);
       } catch (error) {
-        console.error('Error fetching tests:', error);
+        console.error("Error fetching tests:", error);
       }
     };
     fetchTests();
@@ -54,7 +59,7 @@ const TestReport: React.FC = () => {
   const handleTestSelection = (test: Test) => {
     setSelectedTests({
       ...selectedTests,
-      [test.test_name_id]: test.amount
+      [test.test_name_id]: test.amount,
     });
   };
 
@@ -65,27 +70,29 @@ const TestReport: React.FC = () => {
   };
 
   const calculateGrandTotal = () => {
-    return Object.values(selectedTests).reduce((acc, curr) => acc + parseFloat(curr), 0);
+    return Object.values(selectedTests).reduce(
+      (acc, curr) => acc + parseFloat(curr),
+      0
+    );
   };
 
   const calculatePayableAmount = () => {
     const grandTotal = calculateGrandTotal();
-    return grandTotal - (grandTotal * (discount / 100));
+    return grandTotal - grandTotal * (discount / 100);
   };
 
   const handlePatientInfoSubmit = async () => {
     try {
       const response = await axios.post<PatientResponse>(
-        'https://3p3xvw09xg.execute-api.ap-south-1.amazonaws.com/dev/patient_entry',
+        "https://3p3xvw09xg.execute-api.ap-south-1.amazonaws.com/dev/patient_entry",
         patientInfo
       );
 
-      console.log('Patient information saved:', response.data.body);
-      alert('Patient information saved successfully!');
+      console.log("Patient information saved:", response.data.body);
       setPatientId(response.data.body.patient_id);
       handleReportSubmit();
     } catch (error) {
-      console.error('Error saving patient info:', error);
+      console.error("Error saving patient info:", error);
     }
   };
 
@@ -94,12 +101,12 @@ const TestReport: React.FC = () => {
 
     const reportData = {
       bill_informations: selectedTests,
-      biller_name: 'XYZ Labs',
+      biller_name: "XYZ Labs",
       date_of_birth: patientInfo.date_of_birth,
       discount: discount.toString(),
       paid_amount: paidAmount.toString(),
-      referred_by: 'Dr. SmallBang',
-      referred_to: 'Dr. BigBang'
+      referred_by: "Dr. SmallBang",
+      referred_to: "Dr. BigBang",
     };
 
     try {
@@ -107,11 +114,11 @@ const TestReport: React.FC = () => {
         `https://3p3xvw09xg.execute-api.ap-south-1.amazonaws.com/dev/report_entry?patient_id=${patientId}`,
         reportData
       );
-      console.log('Report saved:', response.data.body);
-      alert('Report saved successfully!');
+      console.log("Report saved:", response.data.body);
+      alert("Report saved successfully!");
     } catch (error) {
-      console.error('Error saving report:', error);
-      alert('Error saving report. Please try again.');
+      console.error("Error saving report:", error);
+      alert("Error saving report. Please try again.");
     }
   };
 
@@ -125,9 +132,11 @@ const TestReport: React.FC = () => {
             <label className="block">Name:</label>
             <input
               type="text"
-              className="border p-2 w-full rounded-md"
+              className="bg-inherit border p-2 w-full rounded-md"
               value={patientInfo.name}
-              onChange={(e) => setPatientInfo({ ...patientInfo, name: e.target.value })}
+              onChange={(e) =>
+                setPatientInfo({ ...patientInfo, name: e.target.value })
+              }
               placeholder="Enter patient name"
             />
           </div>
@@ -135,9 +144,11 @@ const TestReport: React.FC = () => {
             <label className="block">Age:</label>
             <input
               type="text"
-              className="border p-2 w-full rounded-md"
+              className="bg-inherit border p-2 w-full rounded-md"
               value={patientInfo.age}
-              onChange={(e) => setPatientInfo({ ...patientInfo, age: e.target.value })}
+              onChange={(e) =>
+                setPatientInfo({ ...patientInfo, age: e.target.value })
+              }
               placeholder="Enter age"
             />
           </div>
@@ -145,9 +156,11 @@ const TestReport: React.FC = () => {
             <label className="block">Address:</label>
             <input
               type="text"
-              className="border p-2 w-full rounded-md"
+              className="bg-inherit border p-2 w-full rounded-md"
               value={patientInfo.address}
-              onChange={(e) => setPatientInfo({ ...patientInfo, address: e.target.value })}
+              onChange={(e) =>
+                setPatientInfo({ ...patientInfo, address: e.target.value })
+              }
               placeholder="Enter address"
             />
           </div>
@@ -155,9 +168,11 @@ const TestReport: React.FC = () => {
             <label className="block">Phone:</label>
             <input
               type="text"
-              className="border p-2 w-full rounded-md"
+              className="bg-inherit border p-2 w-full rounded-md"
               value={patientInfo.phone}
-              onChange={(e) => setPatientInfo({ ...patientInfo, phone: e.target.value })}
+              onChange={(e) =>
+                setPatientInfo({ ...patientInfo, phone: e.target.value })
+              }
               placeholder="Enter phone number"
             />
           </div>
@@ -169,9 +184,11 @@ const TestReport: React.FC = () => {
             <label className="block">Blood Group:</label>
             <input
               type="text"
-              className="border p-2 w-full rounded-md"
+              className="bg-inherit border p-2 w-full rounded-md"
               value={patientInfo.blood_group}
-              onChange={(e) => setPatientInfo({ ...patientInfo, blood_group: e.target.value })}
+              onChange={(e) =>
+                setPatientInfo({ ...patientInfo, blood_group: e.target.value })
+              }
               placeholder="Enter blood group"
             />
           </div>
@@ -185,7 +202,11 @@ const TestReport: React.FC = () => {
       <div className="mt-4 flex items-center gap-4">
         <select
           className="p-2 border border-gray-300 rounded-md"
-          onChange={(e) => handleTestSelection(tests.find(test => test.test_name_id === e.target.value)!)}
+          onChange={(e) =>
+            handleTestSelection(
+              tests.find((test) => test.test_name_id === e.target.value)!
+            )
+          }
         >
           <option value="">Add Test</option>
           {tests.map((test) => (
@@ -194,7 +215,6 @@ const TestReport: React.FC = () => {
             </option>
           ))}
         </select>
-        <button className="p-2 bg-blue-500 text-white rounded-md">+</button>
       </div>
 
       {/* Test List Table */}
@@ -212,8 +232,15 @@ const TestReport: React.FC = () => {
             {Object.keys(selectedTests).map((testId, index) => (
               <tr key={testId}>
                 <td className="border p-2 text-center">{index + 1}</td>
-                <td className="border p-2">{tests.find(test => test.test_name_id === testId)?.test_name}</td>
-                <td className="border p-2 text-right">{selectedTests[testId]}</td>
+                <td className="border p-2">
+                  {
+                    tests.find((test) => test.test_name_id === testId)
+                      ?.test_name
+                  }
+                </td>
+                <td className="border p-2 text-right">
+                  {selectedTests[testId]}
+                </td>
                 <td className="border p-2 text-center">
                   <button
                     className="bg-red-500 text-white p-1 rounded-md"
@@ -235,7 +262,7 @@ const TestReport: React.FC = () => {
           <label className="mr-2">Discount %: </label>
           <input
             type="number"
-            className="border p-2 rounded-md"
+            className="bg-inherit border p-2 rounded-md"
             value={discount}
             onChange={(e) => setDiscount(parseFloat(e.target.value))}
           />
@@ -245,25 +272,21 @@ const TestReport: React.FC = () => {
           <label className="mr-2">Paid Amount: </label>
           <input
             type="number"
-            className="border p-2 rounded-md"
+            className="bg-inherit border p-2 rounded-md"
             value={paidAmount}
             onChange={(e) => setPaidAmount(parseFloat(e.target.value))}
           />
         </div>
-        <p className="text-right">Due Amount: {calculatePayableAmount() - paidAmount}</p>
+        <p className="text-right">
+          Due Amount: {calculatePayableAmount() - paidAmount}
+        </p>
       </div>
 
       {/* Action Buttons */}
-      <div className="mt-4 flex justify-between">
-        <button className="bg-green-500 text-white p-2 rounded-md" onClick={handlePatientInfoSubmit}>
+      <div className="mt-4 flex justify-end">
+        <Button className="bg-green-500" onClick={handlePatientInfoSubmit}>
           Save
-        </button>
-        <button className="bg-blue-500 text-white p-2 rounded-md" onClick={() => window.print()}>
-          Print All
-        </button>
-        <button className="bg-red-500 text-white p-2 rounded-md">
-          Cancel
-        </button>
+        </Button>
       </div>
     </div>
   );

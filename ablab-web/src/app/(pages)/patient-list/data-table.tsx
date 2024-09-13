@@ -30,7 +30,7 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -75,10 +75,11 @@ const PatientLists = ({ data }: { data: any }) => {
   return (
     <div className=" m-4">
       <div className="flex items-center">
-        <DatePickerWithRange></DatePickerWithRange>
         <Input
           placeholder="Filter by Name..."
-          value={(table.getColumn("patient_name")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn("patient_name")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
             table.getColumn("patient_name")?.setFilterValue(event.target.value)
           }
@@ -123,9 +124,9 @@ const PatientLists = ({ data }: { data: any }) => {
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                     </TableHead>
                   );
                 })}
