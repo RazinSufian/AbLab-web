@@ -182,7 +182,7 @@ const TestReport: React.FC = () => {
       {/* Detailed Test Reports */}
       {/* Detailed Test Reports */}
       {report && (
-        <div className="w-full max-w-4xl shadow-md rounded-lg">
+        <div className="w-full shadow-md rounded-lg">
           <h1 className="text-center text-2xl font-semibold my-4">
             Test Reports
           </h1>
@@ -290,11 +290,11 @@ const TestReport: React.FC = () => {
 
       {/* Action Buttons */}
       <div className="mt-4 flex justify-between">
-        <button className="bg-blue-500 text-white p-2 rounded-md">Print</button>
-        <button className="bg-green-500 text-white p-2 rounded-md">
+        {/* <button className="bg-blue-500 text-white p-2 rounded-md">Print</button> */}
+        {/* <button className="bg-green-500 text-white p-2 rounded-md">
           Save Changes
-        </button>
-        <button className="bg-red-500 text-white p-2 rounded-md">Cancel</button>
+        </button> */}
+        {/* <button className="bg-red-500 text-white p-2 rounded-md">Cancel</button> */}
       </div>
     </div>
   );

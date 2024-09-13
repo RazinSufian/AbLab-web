@@ -44,7 +44,7 @@ const ReportPage = () => {
     const formattedData = Object.fromEntries(updatedData);
     // Ensure required fields are included
     formattedData["patient_id"] = reportData.patient_id;
-    formattedData["report_status"] = reportData.report_status;
+    formattedData["report_status"] = "1";
 
     const apiUrl = `https://3p3xvw09xg.execute-api.ap-south-1.amazonaws.com/dev/HB07_update?test_id=${testId}&report_id=${reportId}`;
     try {
@@ -59,7 +59,7 @@ const ReportPage = () => {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="container mx-auto p-10 shadow-xl bg-white text-black">
+    <div className="container w-full max-w-5xl mx-auto p-10 shadow-xl bg-white text-black">
       <h1 className="text-2xl font-bold text-center mb-8">
         Histopathology Biopsy Report
       </h1>
@@ -113,7 +113,7 @@ const ReportPage = () => {
             </p>
             <textarea
               name="h_gross_description"
-              className="form-textarea mt-1 block w-full"
+              className="form-textarea mt-1 block w-full bg-inherit"
               defaultValue={reportData?.h_gross_description}
               required
             />
@@ -126,7 +126,7 @@ const ReportPage = () => {
             </p>
             <textarea
               name="h_microscopic_appearance"
-              className="form-textarea mt-1 block w-full"
+              className="form-textarea mt-1 block w-full bg-inherit"
               defaultValue={reportData?.h_microscopic_appearance}
               required
             />
@@ -137,7 +137,7 @@ const ReportPage = () => {
             </p>
             <textarea
               name="comment"
-              className="form-textarea mt-1 block w-full"
+              className="form-textarea mt-1 block w-full bg-inherit"
               defaultValue={reportData?.comment}
               required
             />
@@ -148,7 +148,7 @@ const ReportPage = () => {
             </p>
             <textarea
               name="recomandation"
-              className="form-textarea mt-1 block w-full"
+              className="form-textarea mt-1 block w-full bg-inherit"
               defaultValue={reportData?.recomandation}
               required
             />
@@ -159,7 +159,7 @@ const ReportPage = () => {
             </p>
             <textarea
               name="note"
-              className="form-textarea mt-1 block w-full"
+              className="form-textarea mt-1 block w-full bg-inherit"
               defaultValue={reportData?.note}
               required
             />

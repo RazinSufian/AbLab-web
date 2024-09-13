@@ -2,6 +2,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
+import { Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Test {
   test_name_id: string;
@@ -41,6 +44,9 @@ const TestReport: React.FC = () => {
   });
   const [discount, setDiscount] = useState<number>(0);
   const [paidAmount, setPaidAmount] = useState<number>(0);
+  const currentDate = format(new Date(), "MM/dd/yyyy"); // or 'dd/MM/yyyy' based on your preference
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchTests = async () => {
@@ -51,6 +57,8 @@ const TestReport: React.FC = () => {
         setTests(response.data.body.tests);
       } catch (error) {
         console.error("Error fetching tests:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchTests();
@@ -87,41 +95,47 @@ const TestReport: React.FC = () => {
         "https://3p3xvw09xg.execute-api.ap-south-1.amazonaws.com/dev/patient_entry",
         patientInfo
       );
+      const patient_id = response.data.body.patient_id;
+      if (patient_id) {
+        const reportData = {
+          bill_informations: selectedTests,
+          biller_name: "XYZ Labs",
+          date_of_birth: patientInfo.date_of_birth,
+          discount: discount.toString(),
+          paid_amount: paidAmount.toString(),
+          referred_by: "Dr. SmallBang",
+          referred_to: "Dr. BigBang",
+        };
+        const response = await axios.post<ReportResponse>(
+          `https://3p3xvw09xg.execute-api.ap-south-1.amazonaws.com/dev/report_entry?patient_id=${patient_id}`,
+          reportData
+        );
+        console.log("Report saved:", response.data.body);
+        toast({
+          title: "Report saved",
+          description: "Report saved successfully",
+        });
 
-      console.log("Patient information saved:", response.data.body);
-      setPatientId(response.data.body.patient_id);
-      handleReportSubmit();
+        setPatientId(patient_id);
+      } else {
+        console.error("Error saving patient info:", response.data.body);
+        toast({
+          title: "Error",
+          description: response.data.body.message,
+          variant: "destructive",
+        });
+      }
     } catch (error) {
       console.error("Error saving patient info:", error);
     }
   };
-
-  const handleReportSubmit = async () => {
-    if (!patientId) return;
-
-    const reportData = {
-      bill_informations: selectedTests,
-      biller_name: "XYZ Labs",
-      date_of_birth: patientInfo.date_of_birth,
-      discount: discount.toString(),
-      paid_amount: paidAmount.toString(),
-      referred_by: "Dr. SmallBang",
-      referred_to: "Dr. BigBang",
-    };
-
-    try {
-      const response = await axios.post<ReportResponse>(
-        `https://3p3xvw09xg.execute-api.ap-south-1.amazonaws.com/dev/report_entry?patient_id=${patientId}`,
-        reportData
-      );
-      console.log("Report saved:", response.data.body);
-      alert("Report saved successfully!");
-    } catch (error) {
-      console.error("Error saving report:", error);
-      alert("Error saving report. Please try again.");
-    }
-  };
-
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader2 className="mx-auto animate-spin w-32 h-32" />
+      </div>
+    );
+  }
   return (
     <div className="p-4 mx-auto rounded-md shadow-md">
       {/* Patient Information */}
@@ -179,7 +193,7 @@ const TestReport: React.FC = () => {
         </div>
         <div>
           <h2 className="font-bold text-lg">Report Information:</h2>
-          <p>Date: {new Date().toLocaleDateString()}</p>
+          <p>Date: {currentDate}</p>
           <div className="mt-2">
             <label className="block">Blood Group:</label>
             <input
