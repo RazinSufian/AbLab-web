@@ -1,7 +1,8 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useSearchParams } from 'next/navigation';
+"use client";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 interface TestInformation {
   report_status: string;
@@ -44,33 +45,85 @@ interface Report {
 const TestReport: React.FC = () => {
   const [patient, setPatient] = useState<Patient | null>(null);
   const [report, setReport] = useState<Report | null>(null);
-  const [testInfos, setTestInfos] = useState<{ [key: string]: TestInformation }>({});
+  const [testInfos, setTestInfos] = useState<{
+    [key: string]: TestInformation;
+  }>({});
   const searchParams = useSearchParams();
-  const report_id = searchParams.get('report_id');
-  const patient_id = searchParams.get('patient_id');
+  const report_id = searchParams.get("report_id");
+  const patient_id = searchParams.get("patient_id");
 
   useEffect(() => {
     const fetchReportDetails = async () => {
       try {
         if (report_id && patient_id) {
-          if (typeof report_id === 'string' && typeof patient_id === 'string') {
-              const response = await axios.get(`https://3p3xvw09xg.execute-api.ap-south-1.amazonaws.com/dev/report_details?report_id=${report_id}&patient_id=${patient_id}`);
-              const data = response.data.body;
-              setPatient(data.patient);
-              setReport(data.report);
-              setTestInfos(data.testes_informations);
-            }
-      } else {
-          alert('Invalid report ID or patient ID');
-        console.error('Invalid report ID or patient ID');
-      }
+          if (typeof report_id === "string" && typeof patient_id === "string") {
+            const response = await axios.get(
+              `https://3p3xvw09xg.execute-api.ap-south-1.amazonaws.com/dev/report_details?report_id=${report_id}&patient_id=${patient_id}`
+            );
+            const data = response.data.body;
+            setPatient(data.patient);
+            setReport(data.report);
+            setTestInfos(data.testes_informations);
+          }
+        } else {
+          alert("Invalid report ID or patient ID");
+          console.error("Invalid report ID or patient ID");
+        }
       } catch (error) {
-        console.error('Error fetching report details:', error);
+        console.error("Error fetching report details:", error);
       }
     };
 
     fetchReportDetails();
   }, [report_id, patient_id]);
+
+  const getTestName = (testId: string) => {
+    const prefix = testId.substring(0, 2); // Assuming testId starts with two-letter prefix
+    switch (prefix) {
+      case "PS":
+        return "Pap Smear";
+      case "FN":
+        return "FNAC";
+      case "SB":
+        return "Skin Biopsy";
+      case "SA":
+        return "Semen Analysis";
+      case "FA":
+        return "Fluid Analysis";
+      case "NB":
+        return "Needle Core Biopsy";
+      case "HB":
+        return "Histopathological Biopsy";
+      case "FC":
+        return "Fungus Cytology";
+      default:
+        return "Unknown Test";
+    }
+  };
+
+  const getTestPageName = (testId: string) => {
+    const prefix = testId.substring(0, 2); // Assuming testId starts with two-letter prefix
+    switch (prefix) {
+      case "PS":
+        return "PapSmear";
+      case "FN":
+        return "FNAC";
+      case "SB":
+        return "SkinBiopsy";
+      case "SA":
+        return "SemenAnalysis";
+      case "FA":
+        return "FluidAnalysis";
+      case "NB":
+        return "NeedleCoreBiopsy";
+      case "HB":
+        return "HistopathologicalBiopsy";
+      case "FC":
+        return "FungusCytology";
+      default:
+        return "Unknown Test";
+    }
+  };
 
   return (
     <div className="p-4 mx-auto rounded-md shadow-md">
@@ -102,33 +155,43 @@ const TestReport: React.FC = () => {
           <table className="w-full table-auto border-collapse border border-gray-300">
             <thead>
               <tr className="bg-gray-200 text-black">
+                <th className="border p-2">Test Name</th>
                 <th className="border p-2">Test ID</th>
                 <th className="border p-2">Amount</th>
                 <th className="border p-2">Status</th>
               </tr>
             </thead>
             <tbody>
-              {Object.entries(report.bill_informations).map(([testId, amount]) => (
-                <tr key={testId}>
-                  <td className="border p-2">{testId}</td>
-                  <td className="border p-2">{amount}</td>
-                  <td className="border p-2">{testInfos[testId]?.report_status || 'Pending'}</td>
-                </tr>
-              ))}
+              {Object.entries(report.bill_informations).map(
+                ([testId, amount]) => (
+                  <tr key={testId}>
+                    <td className="border p-2">{getTestName(testId)}</td>
+                    <td className="border p-2">{testId}</td>
+                    <td className="border p-2">{amount}</td>
+                    <td className="border p-2">
+                      {testInfos[testId]?.report_status || "Pending"}
+                    </td>
+                  </tr>
+                )
+              )}
             </tbody>
           </table>
         </div>
       )}
 
       {/* Detailed Test Reports */}
+      {/* Detailed Test Reports */}
       {report && (
         <div className="w-full max-w-4xl shadow-md rounded-lg">
-          <h1 className="text-center text-2xl font-semibold my-4">Test Reports</h1>
+          <h1 className="text-center text-2xl font-semibold my-4">
+            Test Reports
+          </h1>
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-gray-100 text-black text-left">
                 <th className="px-4 py-2 font-medium">View</th>
-                <th className="px-4 py-2 font-medium">Test name</th>
+                <th className="px-4 py-2 font-medium">Test Name</th>{" "}
+                {/* Ensure the Test Name header is correct */}
                 <th className="px-4 py-2 font-medium">Test ID</th>
                 <th className="px-4 py-2 font-medium">Report by</th>
                 <th className="px-4 py-2 font-medium">Report Status</th>
@@ -136,29 +199,90 @@ const TestReport: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {Object.entries(testInfos).map(([testId, { report_status, report_by }]) => (
-                <tr key={testId} className="border-t">
-                  <td className="px-4 py-2">
-                    <button className="text-blue-500 font-semibold">View</button>
-                  </td>
-                  <td className="px-4 py-2 text-blue-500 font-semibold">{testId}</td>
-                  <td className="px-4 py-2 text-blue-500">{report_status}</td>
-                  <td className="px-4 py-2">{report_by === '' ? 'N/A' : report_by}</td>
-                  <td className="px-4 py-2">
-                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${report_status === '1' ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800'}`}>
-                      {report_status === '1' ? 'Complete' : 'Incomplete'}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2">
-                    <button className="px-4 py-2 bg-purple-100 text-purple-600 font-semibold rounded-lg mr-2">
-                      Edit
-                    </button>
-                    <button className="px-4 py-2 border border-blue-500 text-blue-500 rounded-lg">
-                      Print
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {Object.entries(testInfos).map(
+                ([testId, { report_status, report_by }]) => (
+                  <tr key={testId} className="border-t">
+                    <td className="px-4 py-2">
+                      <button className="text-blue-500 font-semibold">
+                        <Link
+                          href={{
+                            pathname: `/report-view/details/${getTestPageName(
+                              testId
+                            )}`,
+                            query: {
+                              report_id: report.report_id,
+                              test_id: testId,
+                              mode: "view",
+                            },
+                          }}
+                        >
+                          {"View"}
+                        </Link>
+                      </button>
+                    </td>
+                    <td className="px-4 py-2 text-blue-500 font-semibold">
+                      {getTestName(testId)}
+                    </td>{" "}
+                    {/* Use getTestName to display the test name */}
+                    <td className="px-4 py-2">{testId}</td>
+                    <td className="px-4 py-2">
+                      {report_by === "" ? "N/A" : report_by}
+                    </td>
+                    <td className="px-4 py-2">
+                      <span
+                        className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                          report_status === "1"
+                            ? "bg-green-200 text-green-800"
+                            : "bg-red-200 text-red-800"
+                        }`}
+                      >
+                        {report_status === "1" ? "Complete" : "Incomplete"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2">
+                      <button className="px-4 py-2 bg-purple-100 text-purple-600 font-semibold rounded-lg mr-2">
+                        <Link
+                          href={{
+                            pathname: `/report-view/details/${getTestPageName(
+                              testId
+                            )}`,
+                            query: {
+                              report_id: report.report_id,
+                              test_id: testId,
+                              mode: "edit",
+                            },
+                          }}
+                        >
+                          {"Edit"}
+                        </Link>
+                      </button>
+                      <button
+                        className="px-4 py-2 border border-blue-500 text-blue-500 rounded-lg"
+                        onClick={() => {
+                          const url = `/print/${getTestPageName(
+                            testId
+                          )}?report_id=${
+                            report.report_id
+                          }&test_id=${testId}&mode=print`;
+                          const newWindow = window.open(
+                            url,
+                            "printWindow",
+                            "width=800,height=650"
+                          );
+
+                          if (newWindow) {
+                            newWindow.focus(); // Call the focus method if newWindow is not null
+                          } else {
+                            console.error("Failed to open new window");
+                          }
+                        }}
+                      >
+                        Print
+                      </button>
+                    </td>
+                  </tr>
+                )
+              )}
             </tbody>
           </table>
         </div>
@@ -166,15 +290,11 @@ const TestReport: React.FC = () => {
 
       {/* Action Buttons */}
       <div className="mt-4 flex justify-between">
-        <button className="bg-blue-500 text-white p-2 rounded-md">
-          Print
-        </button>
+        <button className="bg-blue-500 text-white p-2 rounded-md">Print</button>
         <button className="bg-green-500 text-white p-2 rounded-md">
           Save Changes
         </button>
-        <button className="bg-red-500 text-white p-2 rounded-md">
-          Cancel
-        </button>
+        <button className="bg-red-500 text-white p-2 rounded-md">Cancel</button>
       </div>
     </div>
   );
