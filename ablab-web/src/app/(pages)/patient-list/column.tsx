@@ -14,6 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export type Payment = {
   patient_name: string;
@@ -82,7 +83,7 @@ export const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "report_id",
     header: "Report ID",
-    cell: ({ row }) => <div>{row.getValue("report_id")}</div>,
+    cell: ({ row }) => <div><Link href={{pathname: "/report-view", query: { report_id: row.getValue("report_id"), patient_id: row.getValue("patient_id") }}}>{row.getValue("report_id")}</Link></div>,
   },
   {
     accessorKey: "entry_date",
