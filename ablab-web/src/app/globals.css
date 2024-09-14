@@ -24,6 +24,10 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  /* Custom Rotate Class */
+  .rotate-custom {
+    transform: rotate(-2deg); /* Rotate 10 degrees to the left */
+  }
 }
 
 @layer base {
