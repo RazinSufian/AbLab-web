@@ -37,6 +37,8 @@ const PatientList = () => {
       try {
         let endpoint =
           "https://3p3xvw09xg.execute-api.ap-south-1.amazonaws.com/dev/report_list";
+
+        // Adjust the endpoint based on filterType
         if (filterType === "day") {
           endpoint += `?day=${selectedDay}`;
         } else if (filterType === "week") {
@@ -47,6 +49,12 @@ const PatientList = () => {
               "yyyy-MM-dd"
             )}_to_${format(selectedDateRange.to, "yyyy-MM-dd")}`;
           }
+        } else if (filterType === "this_week") {
+          // API parameter for "This Week"
+          endpoint += `?week=1`;
+        } else if (filterType === "last_two_weeks") {
+          // API parameter for "Last Two Weeks"
+          endpoint += `?week=2`;
         }
 
         const response = await axiosInstance.get(endpoint);
@@ -67,7 +75,7 @@ const PatientList = () => {
 
   return (
     <div>
-      <h1>Patient List</h1>
+      <h1>Report List</h1>
       <div className="flex items-center space-x-4">
         <DatePickerWithRange
           onSelectRange={(range: any) => {
@@ -77,8 +85,15 @@ const PatientList = () => {
         />
         <Select
           onValueChange={(value) => {
-            setFilterType("day");
-            setSelectedDay(value);
+            // Set the filter type based on the selected value
+            if (value === "this_week") {
+              setFilterType("this_week");
+            } else if (value === "last_two_weeks") {
+              setFilterType("last_two_weeks");
+            } else {
+              setFilterType("day");
+              setSelectedDay(value);
+            }
           }}
         >
           <SelectTrigger className="w-[180px]">
@@ -96,6 +111,12 @@ const PatientList = () => {
               <SelectItem value={format(subDays(new Date(), 2), "yyyy-MM-dd")}>
                 Day before Yesterday
               </SelectItem>
+              <SelectItem value="this_week">This Week</SelectItem>{" "}
+              {/* New Option */}
+              <SelectItem value="last_two_weeks">
+                Last Two Weeks
+              </SelectItem>{" "}
+              {/* New Option */}
             </SelectGroup>
           </SelectContent>
         </Select>

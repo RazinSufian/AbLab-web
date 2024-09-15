@@ -39,8 +39,8 @@ export const data: Payment[] = [
     discount: 500, // in BDT
     paid_amount: 500, // in BDT
     test_report_status: {
-      "NB000006": "1",
-      "HB000009": "2"
+      NB000006: "1",
+      HB000009: "2",
     },
     paymentDue: "2024-09-01",
   },
@@ -83,7 +83,21 @@ export const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "report_id",
     header: "Report ID",
-    cell: ({ row }) => <div><Link href={{pathname: "/report-view", query: { report_id: row.getValue("report_id"), patient_id: row.getValue("patient_id") }}}>{row.getValue("report_id")}</Link></div>,
+    cell: ({ row }) => (
+      <div>
+        <Link
+          href={{
+            pathname: "/report-view",
+            query: {
+              report_id: row.getValue("report_id"),
+              patient_id: row.getValue("patient_id"),
+            },
+          }}
+        >
+          {row.getValue("report_id")}
+        </Link>
+      </div>
+    ),
   },
   {
     accessorKey: "entry_date",
@@ -107,7 +121,7 @@ export const columns: ColumnDef<Payment>[] = [
     header: "Discount (%)",
     cell: ({ row }) => {
       const discount = parseFloat(row.getValue("discount"));
-      
+
       return <div className="text-left font-medium">{discount}%</div>;
     },
   },
@@ -125,14 +139,23 @@ export const columns: ColumnDef<Payment>[] = [
   },
   {
     accessorKey: "test_report_status",
-    header: "Test Status",
+    header: "Report Remaining",
     cell: ({ row }) => {
-      const statusCounts = Object.values(row.getValue("test_report_status") as Record<string, string>);
-      const totalCount = statusCounts.reduce((acc, value) => acc + parseInt(value, 10), 0);
-      return <div>{totalCount} tests</div>;
+      // Get the test_report_status object from the current row
+      const testStatus = row.getValue("test_report_status") as Record<
+        string,
+        string
+      >;
+
+      // Count tests where the status value is not equal to "1"
+      const incompleteTestsCount = Object.values(testStatus).filter(
+        (status) => status !== "1"
+      ).length;
+
+      return <div className="text-center">{incompleteTestsCount}</div>;
     },
   },
-  
+
   {
     accessorKey: "estimated_total", // This is used as a key just for identification
     header: "Remaining Payment (BDT)",
@@ -142,12 +165,13 @@ export const columns: ColumnDef<Payment>[] = [
       const remainingPayment = estimatedTotal - paidAmount;
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: "BDT"
+        currency: "BDT",
       }).format(remainingPayment);
-      return <div className="text-left font-medium">{formatted}</div>;
+      return (
+        <div className="text-left font-medium text-center">{formatted}</div>
+      );
     },
-  }
-  ,
+  },
 
   {
     id: "actions",
