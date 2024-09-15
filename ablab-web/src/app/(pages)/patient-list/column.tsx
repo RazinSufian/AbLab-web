@@ -93,6 +93,7 @@ export const columns: ColumnDef<Payment>[] = [
               patient_id: row.getValue("patient_id"),
             },
           }}
+          className="text-blue-500" // Add this class to make the text blue
         >
           {row.getValue("report_id")}
         </Link>
