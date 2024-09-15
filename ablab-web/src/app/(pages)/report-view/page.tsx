@@ -158,7 +158,7 @@ const TestReport: React.FC = () => {
                 <th className="border p-2">Test Name</th>
                 <th className="border p-2">Test ID</th>
                 <th className="border p-2">Amount</th>
-                <th className="border p-2">Status</th>
+                {/* <th className="border p-2">Status</th> */}
               </tr>
             </thead>
             <tbody>
@@ -168,9 +168,9 @@ const TestReport: React.FC = () => {
                     <td className="border p-2">{getTestName(testId)}</td>
                     <td className="border p-2">{testId}</td>
                     <td className="border p-2">{amount}</td>
-                    <td className="border p-2">
+                    {/* <td className="border p-2">
                       {testInfos[testId]?.report_status || "Pending"}
-                    </td>
+                    </td> */}
                   </tr>
                 )
               )}

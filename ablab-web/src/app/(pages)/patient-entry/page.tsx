@@ -42,8 +42,8 @@ const TestReport: React.FC = () => {
     blood_group: "",
     date_of_birth: "",
   });
-  const [discount, setDiscount] = useState<number>(0);
-  const [paidAmount, setPaidAmount] = useState<number>(0);
+  const [discount, setDiscount] = useState<number | null>(null);
+  const [paidAmount, setPaidAmount] = useState<number | null>(null);
   const currentDate = format(new Date(), "MM/dd/yyyy"); // or 'dd/MM/yyyy' based on your preference
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -86,10 +86,21 @@ const TestReport: React.FC = () => {
 
   const calculatePayableAmount = () => {
     const grandTotal = calculateGrandTotal();
-    return grandTotal - grandTotal * (discount / 100);
+    return grandTotal - grandTotal * (discount ? discount / 100 : 0);
   };
 
   const handlePatientInfoSubmit = async () => {
+    const totalPayable = calculatePayableAmount();
+
+    if (paidAmount && paidAmount > totalPayable) {
+      toast({
+        title: "Error",
+        description: "Paid amount cannot exceed the total payable amount",
+        variant: "destructive",
+      });
+      return; // Prevent API call if paidAmount > totalPayable
+    }
+
     try {
       const response = await axios.post<PatientResponse>(
         "https://3p3xvw09xg.execute-api.ap-south-1.amazonaws.com/dev/patient_entry",
@@ -101,8 +112,8 @@ const TestReport: React.FC = () => {
           bill_informations: selectedTests,
           biller_name: "XYZ Labs",
           date_of_birth: patientInfo.date_of_birth,
-          discount: discount.toString(),
-          paid_amount: paidAmount.toString(),
+          discount: discount?.toString() || "0",
+          paid_amount: paidAmount?.toString() || "0",
           referred_by: "Dr. SmallBang",
           referred_to: "Dr. BigBang",
         };
@@ -129,6 +140,7 @@ const TestReport: React.FC = () => {
       console.error("Error saving patient info:", error);
     }
   };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -136,6 +148,7 @@ const TestReport: React.FC = () => {
       </div>
     );
   }
+
   return (
     <div className="p-4 mx-auto rounded-md shadow-md">
       {/* Patient Information */}
@@ -277,8 +290,8 @@ const TestReport: React.FC = () => {
           <input
             type="number"
             className="bg-inherit border p-2 rounded-md"
-            value={discount}
-            onChange={(e) => setDiscount(parseFloat(e.target.value))}
+            value={discount || ""}
+            onChange={(e) => setDiscount(parseFloat(e.target.value) || null)}
           />
         </div>
         <p className="text-right">Total Payable: {calculatePayableAmount()}</p>
@@ -287,12 +300,12 @@ const TestReport: React.FC = () => {
           <input
             type="number"
             className="bg-inherit border p-2 rounded-md"
-            value={paidAmount}
-            onChange={(e) => setPaidAmount(parseFloat(e.target.value))}
+            value={paidAmount || ""}
+            onChange={(e) => setPaidAmount(parseFloat(e.target.value) || null)}
           />
         </div>
         <p className="text-right">
-          Due Amount: {calculatePayableAmount() - paidAmount}
+          Due Amount: {calculatePayableAmount() - (paidAmount || 0)}
         </p>
       </div>
 

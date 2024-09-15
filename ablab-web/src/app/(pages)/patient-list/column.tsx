@@ -162,11 +162,28 @@ export const columns: ColumnDef<Payment>[] = [
     cell: ({ row }) => {
       const estimatedTotal = row.original.estimated_total; // Accessing from the original data
       const paidAmount = row.original.paid_amount; // Accessing from the original data
-      const remainingPayment = estimatedTotal - paidAmount;
+      const discount = row.original.discount; // Accessing the discount from the original data
+
+      // Calculate the discounted total
+      const discountedTotal = estimatedTotal * (1 - discount / 100);
+
+      // Check if the difference is within ±5
+      const difference = Math.abs(discountedTotal - paidAmount);
+
+      // Determine remaining payment
+      let remainingPayment;
+      if (difference <= 5) {
+        remainingPayment = 0; // If the difference is within ±5, consider it paid
+      } else {
+        remainingPayment = discountedTotal - paidAmount;
+      }
+
+      // Format the remaining payment
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "BDT",
       }).format(remainingPayment);
+
       return (
         <div className="text-left font-medium text-center">{formatted}</div>
       );
