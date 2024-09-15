@@ -266,12 +266,12 @@ const TestReport: React.FC = () => {
                           }&test_id=${testId}&mode=print`;
                           const newWindow = window.open(
                             url,
-                            "printWindow",
-                            "width=800,height=650"
+                            "_blank",
+                            "fullscreen=yes"
                           );
 
                           if (newWindow) {
-                            newWindow.focus(); // Call the focus method if newWindow is not null
+                            newWindow.focus();
                           } else {
                             console.error("Failed to open new window");
                           }

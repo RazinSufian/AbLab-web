@@ -13,6 +13,47 @@
     --foreground: #ededed;
   }
 }
+@media print {
+  /* Hide unwanted elements */
+  .navbar, .logout-btn, .sidebar, .footer, .non-printable {
+    display: none !important;
+  }
+
+  /* Make the body and print content take full screen */
+  body, html {
+    height: 100%;
+    overflow: hidden; /* Prevent scrolling */
+  }
+
+  .print-content {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    page-break-before: auto;
+    page-break-after: auto;
+    page-break-inside: avoid;
+  }
+
+  /* Set up the page for A4 size */
+  @page {
+    size: A4;
+    margin: 0; /* Remove default margins */
+  }
+  
+  /* Print only the print-content and remove background */
+  .print-content {
+    background: white; /* Ensure the background is white */
+  }
+}
+
+
+
+
+
+
+
+
 
 body {
   color: var(--foreground);
