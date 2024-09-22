@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Link from "next/link"; // Import the Link component
 
 interface SummaryData {
   total_patients: string;
@@ -151,7 +152,18 @@ export default function ReportTable() {
                                   {report.patient_id}
                                 </td>
                                 <td className="px-4 py-2 text-center">
-                                  {report.report_id}
+                                  <Link
+                                    href={{
+                                      pathname: "/report-view",
+                                      query: {
+                                        report_id: report.report_id,
+                                        patient_id: report.patient_id,
+                                      },
+                                    }}
+                                    className="text-blue-500" // Add this class to make the text blue
+                                  >
+                                    {report.report_id}
+                                  </Link>
                                 </td>
                                 <td className="px-4 py-2 text-center">
                                   {report.estimated_total}

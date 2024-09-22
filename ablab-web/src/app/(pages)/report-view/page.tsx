@@ -156,17 +156,15 @@ const TestReport: React.FC = () => {
             <thead>
               <tr className="bg-gray-200 text-black">
                 <th className="border p-2">Test Name</th>
-                <th className="border p-2">Test ID</th>
                 <th className="border p-2">Amount</th>
                 {/* <th className="border p-2">Status</th> */}
               </tr>
             </thead>
             <tbody>
               {Object.entries(report.bill_informations).map(
-                ([testId, amount]) => (
-                  <tr key={testId}>
-                    <td className="border p-2">{getTestName(testId)}</td>
-                    <td className="border p-2">{testId}</td>
+                ([testName, amount]) => (
+                  <tr key={testName}>
+                    <td className="border p-2">{testName}</td>
                     <td className="border p-2">{amount}</td>
                     {/* <td className="border p-2">
                       {testInfos[testId]?.report_status || "Pending"}
